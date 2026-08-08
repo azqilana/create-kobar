@@ -1,5 +1,6 @@
 import getelemen from "./system/observer.js";
 import { registerPage } from "./system/registry.js";
+import { component } from "./system/component.js";
 
 class Helper {
   getElement(...selector) {
@@ -14,4 +15,12 @@ class Helper {
 }
 
 const helper = new Helper();
-export default helper;
+
+export default new Proxy(helper, {
+  get(target, key) {
+    if (key in target) return target[key];
+    if (typeof key === "string" && key.startsWith("useComponentFrom")) {
+      return component[key];
+    }
+  },
+});

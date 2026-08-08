@@ -1,22 +1,15 @@
-import { load } from "./route.js";
 import getelemen from "./observer.js";
+import { load } from "./route.js";
 
 // — Helper —
 
 const toCamelCase = (str) =>
   str
     .split("-")
-    .map((word, i) =>
-      i === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1),
-    )
+    .map((w, i) => (i === 0 ? w : w.charAt(0).toUpperCase() + w.slice(1)))
     .join("");
 
-const toFileName = (str) =>
-  str
-    .split(/(?=[A-Z])/)
-    .filter(Boolean) // [PERBAIKAN] Membuang string kosong di awal agar path file tidak salah
-    .map((w) => w.toLowerCase())
-    .join("-");
+const toFileName = (str) => str.charAt(0).toLowerCase() + str.slice(1);
 
 // — Parse komponen dari HTML string —
 
@@ -49,7 +42,6 @@ function parseComponents(htmlString, fileName) {
 // — Cek apakah komponen punya slot data (this-*) —
 
 function hasDataSlot(htmlString) {
-  // [PERBAIKAN] Regex disesuaikan karena DOMParser bisa mengubah format self-closing tag
   return /<this-[a-zA-Z0-9-]+[^>]*>/i.test(htmlString);
 }
 
@@ -58,43 +50,10 @@ function hasDataSlot(htmlString) {
 function injectData(htmlString, data) {
   let result = htmlString;
   for (const [key, value] of Object.entries(data)) {
-    // [PERBAIKAN] Regex menangkap self-closing tag dan tag yang ditutup otomatis
     const regex = new RegExp(`<this-${key}[^>]*>(?:<\\/this-${key}>)?`, "gi");
     result = result.replace(regex, value);
   }
   return result;
-}
-
-// — Buat proxy akses elemen —
-// Cari by tag dulu, lalu .class, lalu #id
-
-function elProxy() {
-  return new Proxy(
-    {},
-    {
-      get(_, elKey) {
-        if (typeof elKey !== "string") return undefined;
-        if (elKey === "then") return undefined;
-        
-        // [PERBAIKAN] Dibungkus try-catch untuk mencegah DOMException jika query tidak valid
-        try {
-          const byTag = document.querySelector(elKey);
-          const byClass = document.querySelector(`.${elKey}`);
-          const byId = document.querySelector(`#${elKey}`);
-          const found = byTag || byClass || byId;
-          
-          if (!found) return getelemen.el(`#${elKey}`); // fallback ke observer (await DOM)
-          
-          return getelemen.el(
-            byTag ? elKey : byClass ? `.${elKey}` : `#${elKey}`,
-          );
-        } catch (error) {
-          // Fallback aman jika elKey mengandung karakter tidak valid untuk querySelector
-          return getelemen.el(`#${elKey}`);
-        }
-      },
-    },
-  );
 }
 
 // — Registry internal —
