@@ -56,6 +56,39 @@ function injectData(htmlString, data) {
   return result;
 }
 
+// — Render HTML string ke DOM dan auto-collect elements —
+
+function renderComponent(htmlString) {
+  const template = document.createElement("template");
+  template.innerHTML = htmlString.trim();
+  const fragment = template.content.cloneNode(true);
+
+  const elements = {};
+
+  // Collect elements dengan ID
+  fragment.querySelectorAll("[id]").forEach((el) => {
+    elements[el.id] = el;
+  });
+
+  // Collect elements dengan data-ref (auto convert kebab-case ke camelCase)
+  fragment.querySelectorAll("[data-ref]").forEach((el) => {
+    const refName = el.getAttribute("data-ref");
+    const camelName = refName.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+    elements[camelName] = el;
+  });
+
+  return {
+    element: fragment,
+    elements,
+    querySelector(selector) {
+      return fragment.querySelector(selector);
+    },
+    querySelectorAll(selector) {
+      return Array.from(fragment.querySelectorAll(selector));
+    },
+  };
+}
+
 // — Registry internal —
 
 const componentRegistry = {};
@@ -84,6 +117,10 @@ async function loadComponent(fileName) {
           return htmlString;
         }
         return injectData(htmlString, obj);
+      },
+      render(obj = {}) {
+        const html = withData ? injectData(htmlString, obj) : htmlString;
+        return renderComponent(html);
       },
     };
   }

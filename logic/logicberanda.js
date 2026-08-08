@@ -15,13 +15,11 @@ Helper.register("beranda", async () => {
   const { kartuProfil, badge } = await Helper.useComponentFromKartu();
   // Kalau tidak punya slot data
   const html = badge._html;
-  // Set style awal tombol
   tombol
     .onTheStyleBackgroundColorItsBlue()
     .onTheStyleColorItsWhite()
     .onTheStyleWidthIts100Pct()
     .onTheClassActive();
-
   // Hapus error saat input difokus
   input.onTheFocus(() => {
     input.offTheClassError();
@@ -37,7 +35,10 @@ Helper.register("beranda", async () => {
       status.onTheTextIsiDuluNamaMu();
       return;
     }
-    const html = kartuProfil.data({ nama: nilai, pesan: "Selamat Hari Raya!" });
+    const html = kartuProfil.data({
+      nama: nilai,
+      pesan: "Gimana Kabar Kamu ?",
+    });
     cardini.onTheStyleBackgroundColorItsBlack();
     cardini.onTheStylePaddingIts10px();
     cardini.onTheStyleMarginIts10px();

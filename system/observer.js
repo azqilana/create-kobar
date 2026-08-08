@@ -1,13 +1,15 @@
 import { theElement } from "./element.js";
 import { createProxy } from "./proxy.js";
+import { createDomProxy } from "./dom.js";
 
+// ubah constructor
 class getEl {
   constructor(selector) {
     this.selector = selector;
     this.el = theElement(this.selector);
     this.action = [];
     this.awaitElement();
-    return createProxy(this); // ✅ Fix: createProxy mengembalikan Proxy, bukan handler
+    return createDomProxy(createProxy(this));
   }
 
   awaitElement() {
