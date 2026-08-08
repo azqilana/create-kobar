@@ -3,7 +3,8 @@
     "title": "Beranda",
     "page": "beranda",
     "style": "styleberanda",
-    "layout": "utama"
+    "layout": "utama",
+    "logic": "logicberanda"
   },
   "/404": {
     "title": "Page Not Found",

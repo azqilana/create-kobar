@@ -1,4 +1,4 @@
-import Helper from "../helper.js";
+import Helper from "../index.js";
 
 Helper.register("beranda", async () => {
   const [judul, subjudul, input, tombol, tombolToggle, status, card, cardini] =

@@ -30,20 +30,10 @@ async function buildLayout(layoutName) {
     const bagian = doc.querySelector(`#${id}`);
     slot.innerHTML = bagian ? bagian.innerHTML : "";
   });
-
-  let theLayoutStyle = theCache[`layoutStyle:${layoutName}`];
-  if (!theLayoutStyle) {
-    theLayoutStyle = await load(`./style/template/${layoutName}.css`);
-    theCache[`layoutStyle:${layoutName}`] = theLayoutStyle;
-  }
-  return theLayoutStyle;
 }
 
 export async function buildPage(data) {
   document.title = data.title;
-
-  const theLayoutStyle = await buildLayout(data.layout);
-
   let thePage = theCache[`page:${data.page}`];
   if (!thePage) {
     thePage = await load(`./page/${data.page}.html`);
@@ -56,10 +46,10 @@ export async function buildPage(data) {
     theStyle = await load(`./style/${data.style}.css`);
     theCache[`style:${data.style}`] = theStyle;
   }
-  style.textContent = theLayoutStyle + "\n" + theStyle;
-
+  style.textContent = theStyle;
+  await buildLayout(data.layout);
+  await import(`/logic/${data.logic}.js`);
   requestAnimationFrame(() => {
-    if (data.layout) runPageInit(`layout:${data.layout}`);
     runPageInit(data.page);
   });
 }
