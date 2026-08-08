@@ -1,0 +1,28 @@
+#nav-go {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: #222;
+}
+
+#nav-go a {
+  color: white;
+  text-decoration: none;
+}
+
+#header-go {
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+#aside-go {
+  padding: 1rem;
+  background: #f5f5f5;
+}
+
+#footer-go {
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #666;
+}

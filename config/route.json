@@ -1,0 +1,13 @@
+{
+  "/": {
+    "title": "Beranda",
+    "page": "beranda",
+    "style": "styleberanda",
+    "layout": "utama"
+  },
+  "/404": {
+    "title": "Page Not Found",
+    "page": "404",
+    "style": "404style"
+  }
+}
