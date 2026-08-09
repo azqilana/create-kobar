@@ -13,7 +13,7 @@ const toFileName = (str) => str.charAt(0).toLowerCase() + str.slice(1);
 
 // — Parse komponen dari HTML string —
 
-function parseComponents(htmlString, fileName) {
+export function parseComponents(htmlString, fileName) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(htmlString, "text/html");
   const body = doc.body;
@@ -40,22 +40,23 @@ function parseComponents(htmlString, fileName) {
 }
 
 // — Cek apakah komponen punya slot data (this-*) —
-
 function hasDataSlot(htmlString) {
-  return /<this-[a-zA-Z0-9-]+[^>]*>/i.test(htmlString);
+  const doc = new DOMParser().parseFromString(htmlString, "text/html");
+  return doc.querySelector("meta[this-data]") !== null;
 }
 
 // — Inject data ke slot this-* —
 
-function injectData(htmlString, data) {
-  let result = htmlString;
-  for (const [key, value] of Object.entries(data)) {
-    const regex = new RegExp(`<this-${key}[^>]*>(?:<\\/this-${key}>)?`, "gi");
-    result = result.replace(regex, value);
-  }
-  return result;
+export function injectData(htmlString, data) {
+  const doc = new DOMParser().parseFromString(htmlString, "text/html");
+  doc.querySelectorAll("meta[this-data]").forEach((el) => {
+    const key = el.getAttribute("this-data");
+    if (key in data) {
+      el.replaceWith(data[key]);
+    }
+  });
+  return doc.body.innerHTML;
 }
-
 // — Render HTML string ke DOM dan auto-collect elements —
 
 function renderComponent(htmlString) {
@@ -98,7 +99,7 @@ const componentRegistry = {};
 async function loadComponent(fileName) {
   if (componentRegistry[fileName]) return componentRegistry[fileName];
 
-  const html = await load(`/page/template/${fileName}.html`);
+  const html = await load(`/components/${fileName}.html`);
   const parsed = parseComponents(html, fileName);
 
   const result = {};

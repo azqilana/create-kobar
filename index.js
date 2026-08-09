@@ -13,6 +13,18 @@ class Helper {
   register(name, intFunc) {
     return registerPage(name, intFunc);
   }
+  useNav() {
+    return this.getElement("#nav-go");
+  }
+  useHeader() {
+    return this.getElement("#header-go");
+  }
+  useAside() {
+    return this.getElement("#aside-go");
+  }
+  useFooter() {
+    return this.getElement("#footer-go");
+  }
 }
 
 const helper = new Helper();

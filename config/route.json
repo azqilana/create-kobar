@@ -3,7 +3,6 @@
     "title": "Beranda",
     "page": "beranda",
     "style": "styleberanda",
-    "layout": "utama",
     "logic": "logicberanda"
   },
   "/404": {

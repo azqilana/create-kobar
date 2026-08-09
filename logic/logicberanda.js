@@ -25,7 +25,11 @@ Helper.register("beranda", async () => {
     input.offTheClassError();
     status.onTheText(" ");
   });
-
+  cardini.onTheStyleBackgroundColorItsBlack();
+  cardini.onTheStylePaddingIts10px();
+  cardini.onTheStyleMarginIts10px();
+  cardini.onTheStyleTextAlignItsCenter();
+  cardini.onTheStyleBorderRadiusIts10px();
   // Klik tombol kirim
   tombol.onTheClick(() => {
     const nilai = input.el.value; // akses .el untuk nilai asli
@@ -35,16 +39,7 @@ Helper.register("beranda", async () => {
       status.onTheTextIsiDuluNamaMu();
       return;
     }
-    const html = kartuProfil.data({
-      nama: nilai,
-      pesan: "Gimana Kabar Kamu ?",
-    });
-    cardini.onTheStyleBackgroundColorItsBlack();
-    cardini.onTheStylePaddingIts10px();
-    cardini.onTheStyleMarginIts10px();
-    cardini.onTheStyleTextAlignItsCenter();
-    cardini.onTheStyleBorderRadiusIts10px();
-    cardini.onTheHtml(html);
+
     judul.changeTheText(`Halo, ${nilai}!`);
     subjudul.onTheTextSelamatDatang();
     tombol.changeTheClassActiveToDisabled().onTheStyleBackgroundColorItsGray();

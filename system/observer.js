@@ -1,6 +1,5 @@
 import { theElement } from "./element.js";
 import { createProxy } from "./proxy.js";
-import { createDomProxy } from "./dom.js";
 
 // ubah constructor
 class getEl {
@@ -9,7 +8,7 @@ class getEl {
     this.el = theElement(this.selector);
     this.action = [];
     this.awaitElement();
-    return createDomProxy(createProxy(this));
+    return createProxy(this);
   }
 
   awaitElement() {

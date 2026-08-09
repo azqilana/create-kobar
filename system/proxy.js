@@ -214,7 +214,9 @@ export const createProxy = (target) => {
         if (raw.startsWith("style")) {
           const rest = parseKey("style", raw);
           // Handle: toggleTheStyleColorItsBlueWithAqua
-          const withMatch = rest.match(/Its([A-Z][a-zA-Z]*)With([A-Z][a-zA-Z]*)/);
+          const withMatch = rest.match(
+            /Its([A-Z][a-zA-Z]*)With([A-Z][a-zA-Z]*)/,
+          );
           if (withMatch) {
             const propRaw = rest.slice(0, rest.search(/Its/i));
             const prop = toKebab(propRaw);
@@ -339,7 +341,17 @@ export const createProxy = (target) => {
 
         unknownMethod(key);
       }
-
+      if (key.startsWith("html")) {
+        const domMethod = key.slice(4);
+        const method = domMethod.charAt(0).toLowerCase() + domMethod.slice(1);
+        return (...args) => {
+          if (!target.el) throw new Error(`[dom] Element belum tersedia`);
+          if (typeof target.el[method] !== "function")
+            throw new Error(`[dom] "${method}" bukan method DOM yang valid`);
+          const result = target.el[method](...args);
+          return result ?? proxy;
+        };
+      }
       if (/^(selector|el|action|awaitElement)$/.test(key)) return undefined;
 
       unknownMethod(key);
