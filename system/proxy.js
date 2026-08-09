@@ -35,8 +35,8 @@ const convertValue = (value) => {
   return value.charAt(0).toLowerCase() + value.slice(1);
 };
 
-const requireArg = (value, key) => {
-  if (value === undefined || value === null || value === "")
+const requireArg = (value, key, allowEmpty = false) => {
+  if (value === undefined || value === null || (!allowEmpty && value === ""))
     throw new Error(`[getEl] Argumen wajib tidak dikirim pada "${key}"`);
 };
 

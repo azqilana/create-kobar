@@ -66,8 +66,7 @@ export function injectData(htmlString, data) {
 function renderComponent(htmlString) {
   const template = document.createElement("template");
   template.innerHTML = htmlString.trim();
-  const fragment = template.content.cloneNode(true);
-  return { element: fragment };
+  return template.content.cloneNode(true);
 }
 
 // — Registry internal —
@@ -107,8 +106,8 @@ async function loadComponent(fileName) {
           const html = withData ? injectData(htmlString, item) : htmlString;
           const res = renderComponent(html);
           return {
-            element: res.element,
-            ...res.elements,
+            element: res,
+            ...res,
           };
         };
 

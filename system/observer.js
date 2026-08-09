@@ -1,32 +1,66 @@
 import { theElement } from "./element.js";
 import { createProxy } from "./proxy.js";
 
-// ubah constructor
 class getEl {
-  constructor(selector) {
+  constructor(el, selector) {
+    this.el = el;
     this.selector = selector;
-    this.el = theElement(this.selector);
     this.action = [];
     this.awaitElement();
     return createProxy(this);
   }
 
-  awaitElement() {
+  awaitElement(items, callback, persistent = false) {
+    const obsConfig = { childList: true, subtree: true, attributes: true };
+    const createObs = (fn) => {
+      const Obs = new MutationObserver(fn);
+      Obs.observe(document.body, obsConfig);
+      return Obs;
+    };
+
+    if (items !== undefined) {
+      const seen = persistent ? new WeakSet() : null;
+
+      const check = (collection) => {
+        const arr = Array.isArray(collection) ? collection : [collection];
+        arr.forEach((item, index) => {
+          if (seen && seen.has(item)) return;
+          if (seen) seen.add(item);
+          if (document.contains(item)) {
+            callback && callback(item, index);
+          } else if (!persistent) {
+            const Obs = createObs(() => {
+              if (document.contains(item)) {
+                Obs.disconnect();
+                callback && callback(item, index);
+              }
+            });
+          }
+        });
+      };
+
+      check(items);
+
+      if (persistent) {
+        createObs(() => {
+          const fresh = theElement(this.selector);
+          if (fresh instanceof NodeList || fresh instanceof HTMLCollection) {
+            check(Array.from(fresh));
+          }
+        });
+      }
+
+      return;
+    }
+
     if (this.el) return;
 
-    const Obs = new MutationObserver(() => {
+    createObs(() => {
       this.el = theElement(this.selector);
       if (this.el) {
-        Obs.disconnect(); // ✅ Fix: hapus clearTimeout(timeout) yang tidak terdefinisi
         this.action.forEach((fn) => fn());
         this.action = [];
       }
-    });
-
-    Obs.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
     });
   }
 
@@ -87,7 +121,7 @@ class getEl {
   // — Style —
   onStyle(property, value) {
     if (this.el) {
-      this.el.style.setProperty(property, value.toLowerCase()); // ✅ Fix: typo toLowecase → toLowerCase()
+      this.el.style.setProperty(property, value.toLowerCase());
     } else {
       this.action.push(() =>
         this.el.style.setProperty(property, value.toLowerCase()),
@@ -181,10 +215,33 @@ class getEl {
     }
     return this;
   }
+
+  // — Each —
+  onTheEach(callback) {
+    const run = () => {
+      if (this.el instanceof NodeList || this.el instanceof HTMLCollection) {
+        this.awaitElement(
+          Array.from(this.el),
+          (el, index) => callback(new getEl(el, null), index),
+          true,
+        );
+      } else if (this.el instanceof Element) {
+        this.awaitElement(this.el, (el) => callback(new getEl(el, null), 0));
+      }
+    };
+
+    if (this.el) {
+      run();
+    } else {
+      this.action.push(() => run());
+    }
+
+    return this;
+  }
 }
 
 export default {
   el(selector) {
-    return new getEl(selector);
+    return new getEl(theElement(selector), selector);
   },
 };
