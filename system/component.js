@@ -117,9 +117,19 @@ async function loadComponent(fileName) {
           );
           return htmlString;
         }
+        if (Array.isArray(obj)) {
+          return obj.map((item) => injectData(htmlString, item)).join("");
+        }
         return injectData(htmlString, obj);
       },
       render(obj = {}) {
+        if (Array.isArray(obj)) {
+          const combined = obj.map((item) => {
+            const html = withData ? injectData(htmlString, item) : htmlString;
+            return renderComponent(html);
+          });
+          return combined;
+        }
         const html = withData ? injectData(htmlString, obj) : htmlString;
         return renderComponent(html);
       },
