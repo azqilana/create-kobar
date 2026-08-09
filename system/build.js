@@ -46,9 +46,15 @@ async function resolveComponents(htmlString) {
 
     // Inject data ke slot <meta this-data="...">
     const slotDoc = parser.parseFromString(compHtml, "text/html");
-    slotDoc.querySelectorAll("meta[this-data]").forEach((slot) => {
+    slotDoc.querySelectorAll("[this-data]").forEach((slot) => {
       const key = slot.getAttribute("this-data");
-      if (key in data) slot.replaceWith(data[key]);
+      if (!(key in data)) return;
+      if (slot.tagName.toLowerCase() === "meta") {
+        slot.replaceWith(data[key]);
+      } else {
+        slot.removeAttribute("this-data");
+        slot.setAttribute(`data-${key}`, data[key]);
+      }
     });
     compHtml = slotDoc.body.innerHTML;
 

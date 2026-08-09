@@ -42,52 +42,32 @@ export function parseComponents(htmlString, fileName) {
 // — Cek apakah komponen punya slot data (this-*) —
 function hasDataSlot(htmlString) {
   const doc = new DOMParser().parseFromString(htmlString, "text/html");
-  return doc.querySelector("meta[this-data]") !== null;
+  return doc.querySelector("[this-data]") !== null;
 }
 
 // — Inject data ke slot this-* —
 
 export function injectData(htmlString, data) {
   const doc = new DOMParser().parseFromString(htmlString, "text/html");
-  doc.querySelectorAll("meta[this-data]").forEach((el) => {
+  doc.querySelectorAll("[this-data]").forEach((el) => {
     const key = el.getAttribute("this-data");
-    if (key in data) {
+    if (!(key in data)) return;
+
+    if (el.tagName.toLowerCase() === "meta") {
       el.replaceWith(data[key]);
+    } else {
+      el.removeAttribute("this-data");
+      el.setAttribute(`data-${key}`, data[key]);
     }
   });
   return doc.body.innerHTML;
 }
-// — Render HTML string ke DOM dan auto-collect elements —
 
 function renderComponent(htmlString) {
   const template = document.createElement("template");
   template.innerHTML = htmlString.trim();
   const fragment = template.content.cloneNode(true);
-
-  const elements = {};
-
-  // Collect elements dengan ID
-  fragment.querySelectorAll("[id]").forEach((el) => {
-    elements[el.id] = el;
-  });
-
-  // Collect elements dengan data-ref (auto convert kebab-case ke camelCase)
-  fragment.querySelectorAll("[data-ref]").forEach((el) => {
-    const refName = el.getAttribute("data-ref");
-    const camelName = refName.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-    elements[camelName] = el;
-  });
-
-  return {
-    element: fragment,
-    elements,
-    querySelector(selector) {
-      return fragment.querySelector(selector);
-    },
-    querySelectorAll(selector) {
-      return Array.from(fragment.querySelectorAll(selector));
-    },
-  };
+  return { element: fragment };
 }
 
 // — Registry internal —
@@ -123,15 +103,19 @@ async function loadComponent(fileName) {
         return injectData(htmlString, obj);
       },
       render(obj = {}) {
+        const process = (item) => {
+          const html = withData ? injectData(htmlString, item) : htmlString;
+          const res = renderComponent(html);
+          return {
+            element: res.element,
+            ...res.elements,
+          };
+        };
+
         if (Array.isArray(obj)) {
-          const combined = obj.map((item) => {
-            const html = withData ? injectData(htmlString, item) : htmlString;
-            return renderComponent(html);
-          });
-          return combined;
+          return obj.map(process);
         }
-        const html = withData ? injectData(htmlString, obj) : htmlString;
-        return renderComponent(html);
+        return process(obj);
       },
     };
   }

@@ -12,9 +12,13 @@ Helper.register("beranda", async () => {
       ".card",
       ".cardini",
     );
+
   const { kartuProfil, badge } = await Helper.useComponentFromKartu();
+  const comp = await Helper.useComponentFromKartu();
+  console.log(comp);
   // Kalau tidak punya slot data
   const html = badge._html;
+  let data = [];
   tombol
     .onTheStyleBackgroundColorItsBlue()
     .onTheStyleColorItsWhite()
@@ -25,26 +29,28 @@ Helper.register("beranda", async () => {
     input.offTheClassError();
     status.onTheText(" ");
   });
-  cardini.onTheStyleBackgroundColorItsBlack();
-  cardini.onTheStylePaddingIts10px();
-  cardini.onTheStyleMarginIts10px();
-  cardini.onTheStyleTextAlignItsCenter();
-  cardini.onTheStyleBorderRadiusIts10px();
+
   // Klik tombol kirim
   tombol.onTheClick(() => {
-    const nilai = input.el.value; // akses .el untuk nilai asli
+    const nilai = input.htmlValue(); // akses .el untuk nilai asli
 
     if (!nilai) {
       input.onTheClassError();
       status.onTheTextIsiDuluNamaMu();
       return;
     }
-
+    cardini.onTheStyleBackgroundColorItsBlack();
+    cardini.onTheStylePaddingIts10px();
+    cardini.onTheStyleMarginIts10px();
+    cardini.onTheStyleTextAlignItsCenter();
+    cardini.onTheStyleBorderRadiusIts10px();
+    const itemBaru = { nama: nilai, pesan: "Selamat Datang" };
+    data.push(itemBaru);
+    const kartu = kartuProfil.render(itemBaru);
+    cardini.htmlAppend(kartu.element);
     judul.changeTheText(`Halo, ${nilai}!`);
     subjudul.onTheTextSelamatDatang();
-    tombol.changeTheClassActiveToDisabled().onTheStyleBackgroundColorItsGray();
     status.onTheTextBerhasil().onTheClassAktif();
-    input.onTheAttrDisabledItsTrue();
   });
 
   // Toggle warna judul

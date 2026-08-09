@@ -343,15 +343,37 @@ export const createProxy = (target) => {
       }
       if (key.startsWith("html")) {
         const domMethod = key.slice(4);
-        const method = domMethod.charAt(0).toLowerCase() + domMethod.slice(1);
+        const methodOrProp =
+          domMethod.charAt(0).toLowerCase() + domMethod.slice(1);
+
         return (...args) => {
           if (!target.el) throw new Error(`[dom] Element belum tersedia`);
-          if (typeof target.el[method] !== "function")
-            throw new Error(`[dom] "${method}" bukan method DOM yang valid`);
-          const result = target.el[method](...args);
-          return result ?? proxy;
+
+          // 1. Jika itu adalah fungsi/method DOM (contoh: focus(), blur())
+          if (typeof target.el[methodOrProp] === "function") {
+            const result = target.el[methodOrProp](...args);
+            return result ?? proxy;
+          }
+
+          // 2. Jika itu adalah properti DOM (contoh: value, checked, id)
+          if (methodOrProp in target.el) {
+            if (args.length > 0) {
+              // Mode SETTER: Jika ada argumen yang dikirim
+              target.el[methodOrProp] = args[0];
+              return proxy; // Kembalikan proxy untuk mendukung chaining
+            } else {
+              // Mode GETTER: Jika tidak ada argumen, kembalikan nilainya
+              return target.el[methodOrProp];
+            }
+          }
+
+          // 3. Jika tidak dikenali sama sekali
+          throw new Error(
+            `[dom] "${methodOrProp}" bukan method atau properti DOM yang valid`,
+          );
         };
       }
+
       if (/^(selector|el|action|awaitElement)$/.test(key)) return undefined;
 
       unknownMethod(key);
