@@ -1,6 +1,6 @@
 # 🔥 create-kobar
 
-CLI scaffold untuk membuat project berbasis **Kobar** — framework JavaScript ringan dengan arsitektur Component-Observer.
+CLI scaffold untuk membuat project berbasis **Kobar** — Stater-Kit JavaScript ringan dengan arsitektur Component-Observer.
 
 ## 🚀 Cara Pakai
 
