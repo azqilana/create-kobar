@@ -69,12 +69,47 @@ Helper.register("beranda", async () => {
 
 ### `Helper.getElement(...selector)`
 
-Ambil satu atau banyak element sekaligus. Mengembalikan instance dengan method berantai.
+Ambil satu atau banyak element sekaligus menggunakan CSS selector. Mengembalikan instance dengan method berantai.
 
 ```js
 const judul = Helper.getElement("#judul");
 const [input, tombol] = Helper.getElement("#input", "#tombol");
 ```
+
+### `Helper.getElementByIdNama()` · `Helper.getElementByClassNama()` · dst.
+
+Alternatif pengambilan element dengan gaya penamaan dinamis — tanpa perlu menulis selector string. Hasilnya sama dengan `getElement`, yaitu instance dengan method berantai.
+
+| Method | Setara dengan |
+|--------|---------------|
+| `Helper.getElementByIdNama()` | `document.getElementById("nama")` |
+| `Helper.getElementClassNama()` | `document.getElementsByClassName("nama")` |
+| `Helper.getElementTagDiv()` | `document.getElementsByTagName("div")` |
+| `Helper.getElementNameEmail()` | `document.getElementsByName("email")` |
+| `Helper.getElementAllNama()` | `document.querySelectorAll("nama")` |
+| `Helper.getElementNama()` | `document.querySelector("nama")` |
+
+```js
+// Ambil by ID
+const judul = Helper.getElementByIdJudul();
+
+// Ambil by class
+const kartu = Helper.getElementClassKartu();
+
+// Ambil by tag
+const divs = Helper.getElementTagDiv();
+
+// Ambil by name
+const email = Helper.getElementNameEmail();
+
+// Ambil semua (querySelectorAll)
+const items = Helper.getElementAllItem();
+
+// Fallback querySelector biasa
+const el = Helper.getElementMainContent();
+```
+
+> `getElement(selector)` dan `getElementBy*` saling melengkapi — gunakan mana yang lebih nyaman sesuai konteks.
 
 ### `Helper.useComponentFromNamaFile()`
 
