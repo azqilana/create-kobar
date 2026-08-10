@@ -26,8 +26,7 @@ nama-project/
 ├── logic/            # Logic per halaman (.js)
 ├── page/             # File halaman HTML
 ├── style/            # File CSS per halaman
-├── system/
-│   └── kobar.min.js  # Core Kobar (bundle & minify)
+├── system/           # Core Kobar
 ├── _redirects        # Redirect untuk Netlify/Cloudflare
 ├── index.html        # Entry point HTML
 └── index.js          # Entry point JS & Helper
