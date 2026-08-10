@@ -1,0 +1,54 @@
+name: Build & Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build & minify system
+        run: node build.js
+
+      - name: Copy template files
+        run: |
+          mkdir -p templates/default/components
+          mkdir -p templates/default/config
+          mkdir -p templates/default/logic
+          mkdir -p templates/default/page
+          mkdir -p templates/default/style
+
+          cp -r components/. templates/default/components/
+          cp -r config/. templates/default/config/
+          cp -r logic/. templates/default/logic/
+          cp -r page/. templates/default/page/
+          cp -r style/. templates/default/style/
+          cp _redirects templates/default/_redirects
+          cp index.html templates/default/index.html
+          cp index.js templates/default/index.js
+
+      - name: Update import di index.js template
+        run: |
+          sed -i 's|import "./system/app.js";||g' templates/default/index.js
+          sed -i 's|import getelemen from "./system/observer.js";|import getelemen from "./system/kobar.min.js";|g' templates/default/index.js
+          sed -i 's|import { registerPage } from "./system/registry.js";|import { registerPage } from "./system/kobar.min.js";|g' templates/default/index.js
+          sed -i 's|import { component } from "./system/component.js";|import { component } from "./system/kobar.min.js";|g' templates/default/index.js
+
+      - name: Publish ke npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

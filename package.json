@@ -1,0 +1,22 @@
+{
+  "name": "create-kobar",
+  "version": "0.1.0",
+  "description": "CLI scaffold untuk membuat project Kobar",
+  "type": "module",
+  "bin": {
+    "create-kobar": "./bin/index.js"
+  },
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "prompts": "^2.4.2",
+    "kleur": "^4.1.5",
+    "fs-extra": "^11.2.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  },
+  "keywords": ["kobar", "scaffold", "framework", "cli"],
+  "license": "MIT"
+}
