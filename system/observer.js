@@ -219,22 +219,17 @@ class getEl {
   // — Each —
   onTheEach(callback) {
     const run = () => {
-      if (this.el instanceof NodeList || this.el instanceof HTMLCollection) {
-        this.awaitElement(
-          Array.from(this.el),
-          (el, index) => callback(new getEl(el, null), index),
-          true,
-        );
-      } else if (this.el instanceof Element) {
-        this.awaitElement(this.el, (el) => callback(new getEl(el, null), 0));
-      }
+      const isElement = this.el instanceof Element;
+      const items = isElement ? [this.el] : Array.from(this.el);
+      this.awaitElement(
+        items,
+        (el, index) => callback(new getEl(el, null), index),
+        !isElement,
+      );
     };
 
-    if (this.el) {
-      run();
-    } else {
-      this.action.push(() => run());
-    }
+    if (this.el) run();
+    else this.action.push(() => run());
 
     return this;
   }
