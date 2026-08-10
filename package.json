@@ -1,6 +1,6 @@
 {
   "name": "create-kobar",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "CLI scaffold untuk membuat project Kobar",
   "type": "module",
   "bin": {
@@ -22,5 +22,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/azqilana/kobar"
-  }
+  },
+  "files": ["bin/", "templates/", "README.md", "LICENSE"]
 }
