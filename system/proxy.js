@@ -179,6 +179,10 @@ export const createProxy = (target) => {
           return chain(() => target.removeData(toKebab(rest)));
         }
 
+        if (raw.startsWith("text")) {
+          return chain(() => target.setText(""));
+        }
+
         // event: offTheFocus, offTheClick, dll
         return (fn) => {
           requireArg(fn, key);
@@ -230,6 +234,71 @@ export const createProxy = (target) => {
           unknownMethod(key);
         }
 
+        if (raw.startsWith("attr")) {
+          const rest = parseKey("attr", raw);
+          // toggleTheAttrTitleItsHelloWithWorld → toggle nilai attr antara dua value
+          const withMatch = rest.match(
+            /Its([A-Z][a-zA-Z]*)With([A-Z][a-zA-Z]*)/,
+          );
+          if (withMatch) {
+            const name = toKebab(rest.slice(0, rest.search(/Its/i)));
+            const valA =
+              withMatch[1].charAt(0).toLowerCase() + withMatch[1].slice(1);
+            const valB =
+              withMatch[2].charAt(0).toLowerCase() + withMatch[2].slice(1);
+            return chain(() => {
+              const current = target.getAttr(name);
+              target.onAttr(name, current === valA ? valB : valA);
+            });
+          }
+          // toggleTheAttrDisabled → toggle keberadaan attr (add/remove)
+          const name = toKebab(rest);
+          return chain(() => {
+            if (target.checkAttr(name)) {
+              target.offAttr(name);
+            } else {
+              target.onAttr(name, "");
+            }
+          });
+        }
+
+        if (raw.startsWith("data")) {
+          const rest = parseKey("data", raw);
+          // toggleTheDataIdItsAWithB → toggle nilai data antara dua value
+          const withMatch = rest.match(
+            /Its([A-Z][a-zA-Z]*)With([A-Z][a-zA-Z]*)/,
+          );
+          if (withMatch) {
+            const name = toKebab(rest.slice(0, rest.search(/Its/i)));
+            const valA =
+              withMatch[1].charAt(0).toLowerCase() + withMatch[1].slice(1);
+            const valB =
+              withMatch[2].charAt(0).toLowerCase() + withMatch[2].slice(1);
+            return chain(() => {
+              const current = target.getData(name);
+              target.setData(name, current === valA ? valB : valA);
+            });
+          }
+          unknownMethod(key);
+        }
+
+        if (raw.startsWith("text")) {
+          const rest = raw.slice("text".length);
+          // toggleTheTextHelloWithBye → toggle text antara dua value
+          const withMatch = rest.match(
+            /^([A-Z][a-zA-Z]*)With([A-Z][a-zA-Z]*)$/,
+          );
+          if (withMatch) {
+            const textA = parseText(withMatch[1]);
+            const textB = parseText(withMatch[2]);
+            return chain(() => {
+              const current = target.getText();
+              target.setText(current === textA ? textB : textA);
+            });
+          }
+          unknownMethod(key);
+        }
+
         unknownMethod(key);
       }
 
@@ -264,6 +333,44 @@ export const createProxy = (target) => {
             const oldClass = toKebab(rest.slice(0, rest.lastIndexOf("To")));
             const newClass = toKebab(toMatch[1]);
             return chain(() => target.replaceClass(oldClass, newClass));
+          }
+          unknownMethod(key);
+        }
+
+        // Handle: changeTheStyleColorItsRedToBlue → set style ke nilai baru
+        if (raw.startsWith("style")) {
+          const rest = parseKey("style", raw);
+          const toMatch = rest.match(/To([A-Z][a-zA-Z]*)$/);
+          if (toMatch) {
+            const prop = toKebab(rest.slice(0, rest.lastIndexOf("To")));
+            const newVal = convertValue(toMatch[1]);
+            return chain(() => target.onStyle(prop, newVal));
+          }
+          unknownMethod(key);
+        }
+
+        // Handle: changeTheAttrTitleItsHelloToWorld → set attr ke nilai baru
+        if (raw.startsWith("attr")) {
+          const rest = parseKey("attr", raw);
+          const toMatch = rest.match(/To([A-Z][a-zA-Z]*)$/);
+          if (toMatch) {
+            const name = rest.slice(0, rest.lastIndexOf("To"));
+            const newVal =
+              toMatch[1].charAt(0).toLowerCase() + toMatch[1].slice(1);
+            return chain(() => target.onAttr(name, newVal));
+          }
+          unknownMethod(key);
+        }
+
+        // Handle: changeTheDataIdIts123To456 → set data ke nilai baru
+        if (raw.startsWith("data")) {
+          const rest = parseKey("data", raw);
+          const toMatch = rest.match(/To([A-Z][a-zA-Z]*)$/);
+          if (toMatch) {
+            const name = toKebab(rest.slice(0, rest.lastIndexOf("To")));
+            const newVal =
+              toMatch[1].charAt(0).toLowerCase() + toMatch[1].slice(1);
+            return chain(() => target.setData(name, newVal));
           }
           unknownMethod(key);
         }
@@ -342,9 +449,30 @@ export const createProxy = (target) => {
         unknownMethod(key);
       }
       if (key.startsWith("html")) {
-        const domMethod = key.slice(4);
-        const methodOrProp =
-          domMethod.charAt(0).toLowerCase() + domMethod.slice(1);
+        const domRaw = key.slice(4);
+
+        // Cek apakah ada Its sebagai setter inline: htmlValueItsAbc
+        const itsIndex = domRaw.search(/Its[A-Z]/);
+        if (itsIndex !== -1) {
+          const propRaw = domRaw.slice(0, itsIndex);
+          const methodOrProp =
+            propRaw.charAt(0).toLowerCase() + propRaw.slice(1);
+          const rawValue = domRaw.slice(itsIndex + "Its".length);
+          const value = rawValue.charAt(0).toLowerCase() + rawValue.slice(1);
+
+          return () => {
+            if (!target.el) throw new Error(`[dom] Element belum tersedia`);
+            if (methodOrProp in target.el) {
+              target.el[methodOrProp] = value;
+              return proxy;
+            }
+            throw new Error(
+              `[dom] "${methodOrProp}" bukan properti DOM yang valid`,
+            );
+          };
+        }
+
+        const methodOrProp = domRaw.charAt(0).toLowerCase() + domRaw.slice(1);
 
         return (...args) => {
           if (!target.el) throw new Error(`[dom] Element belum tersedia`);

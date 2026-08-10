@@ -2,6 +2,7 @@ import "./system/app.js";
 import getelemen from "./system/observer.js";
 import { registerPage } from "./system/registry.js";
 import { component } from "./system/component.js";
+import { domProxy } from "./system/dom-proxy.js";
 
 class Helper {
   getElement(...selector) {
@@ -34,6 +35,9 @@ export default new Proxy(helper, {
     if (key in target) return target[key];
     if (typeof key === "string" && key.startsWith("useComponentFrom")) {
       return component[key];
+    }
+    if (typeof key === "string" && key.startsWith("getElement")) {
+      return domProxy[key];
     }
   },
 });

@@ -1,122 +1,36 @@
-:root {
-  --bg: #ffff;
-  --surface: #1a7;
-  --border: #2d3a;
-  --accent: #7c6af7;
-  --text: #e20;
-  --muted: #590;
-  --green: #4ade80;
-  --red: #f87171;
-}
-
 * {
-  box-sizing: border-box;
-  margin: 0;
+  margin: 0px;
   padding: 0;
+  box-sizing: border-box;
 }
-
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: "Segoe UI", system-ui, sans-serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  gap: 1.5rem;
-}
-
-h1 {
-  font-size: 1.8rem;
-  font-weight: 800;
   text-align: center;
-  transition: all 0.3s;
+  height: 99vh;
+  margin: 10px;
+  padding: 20px;
+  background-color:gold;
 }
-
-h2 {
-  font-size: 1rem;
-  color: var(--muted);
-  text-align: center;
-  transition: all 0.3s;
-}
-
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.25rem;
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  border: 2px solid blue;
+  padding: 30px;
+  margin: 20px auto;
+  background-color: darkgreen;
+  border-radius: 15px;
+  display: grid;
+  align-items: center;
 }
-
-input {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.6rem 1rem;
-  color: var(--text);
-  font-size: 0.9rem;
-  width: 100%;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-input:focus {
-  border-color: var(--accent);
-}
-input.error {
-  border-color: var(--red);
-}
-
-button {
-  padding: 0.65rem 1.25rem;
-  border-radius: 8px;
-  border: none;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  width: 100%;
-}
-
-#tombol {
-  background: var(--accent);
-  color: white;
-}
-
-#tombol.active {
-  background: var(--green);
-  color: #0f1117;
-}
-#tombol.disabled {
-  background: var(--muted);
-  cursor: not-allowed;
-}
-
+#input,
+#tombol,
 #tombolToggle {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
+  width: 80%;
+  padding: 10px;
+  margin: 15px auto;
+  border-radius: 15px;
+  font-size: 1.3rem;
+  font-weight: bold;
 }
-
-#tombolToggle.on {
-  border-color: var(--green);
-  color: var(--green);
-}
-
 .status {
-  font-size: 0.8rem;
-  color: var(--muted);
-  text-align: center;
-  min-height: 1.2rem;
-  transition: all 0.3s;
-}
-
-.status.aktif {
-  color: var(--green);
+  border-radius: 20px;
+  font-weight: 900;
+  font-size: 1.2em;
 }

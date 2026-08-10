@@ -1,8 +1,12 @@
-# 🔥 create-kobar
+# 🔥 Kobar
 
-CLI scaffold untuk membuat project berbasis **Kobar** — Stater-Kit JavaScript ringan dengan arsitektur Component-Observer.
+**Kobar** adalah Starter-Kit JavaScript ringan dengan arsitektur **Component-Observer**. Kobar menyediakan sistem routing, component loading, dan manipulasi DOM berbasis Proxy ES6 — tanpa framework berat.
 
-## 🚀 Cara Pakai
+---
+
+## 🚀 Quick Start
+
+Buat project baru dengan CLI:
 
 ```bash
 npx create-kobar nama-project
@@ -15,6 +19,8 @@ pnpm create kobar nama-project
 yarn create kobar nama-project
 npm create kobar@latest nama-project
 ```
+
+---
 
 ## 📁 Struktur Project
 
@@ -34,13 +40,13 @@ nama-project/
 
 ---
 
-## 📦 Kenapa Import dari `index.js`?
+## 📦 Entry Point — `index.js`
 
 ```js
 import Helper from "../index.js";
 ```
 
-Karena `index.js` adalah **satu-satunya pintu masuk** ke semua fitur Kobar:
+`index.js` adalah **satu-satunya pintu masuk** ke semua fitur Kobar:
 
 - **Auto-start app** — routing otomatis aktif begitu file di-load, tidak perlu setup manual
 - **Helper siap pakai** — `getElement`, `register`, `useNav`, `useHeader`, dll sudah tersedia
@@ -52,6 +58,7 @@ Karena `index.js` adalah **satu-satunya pintu masuk** ke semua fitur Kobar:
 ## 🧩 Helper API
 
 ### `Helper.register(nama, fn)`
+
 Daftarkan logic untuk halaman tertentu.
 
 ```js
@@ -61,6 +68,7 @@ Helper.register("beranda", async () => {
 ```
 
 ### `Helper.getElement(...selector)`
+
 Ambil satu atau banyak element sekaligus. Mengembalikan instance dengan method berantai.
 
 ```js
@@ -69,6 +77,7 @@ const [input, tombol] = Helper.getElement("#input", "#tombol");
 ```
 
 ### `Helper.useComponentFromNamaFile()`
+
 Load komponen dari folder `components/`. Nama file ditulis dalam PascalCase setelah `useComponentFrom`.
 
 ```js
@@ -77,14 +86,12 @@ const { kartuProfil } = await Helper.useComponentFromKartu();
 
 ### Layout Helpers
 
-`useNav()`, `useHeader()`, `useAside()`, `useFooter()` digunakan untuk **memasukkan element ke dalam tag layout** yang ada di `index.html`. Masing-masing mengakses `#nav-go`, `#header-go`, `#aside-go`, dan `#footer-go`.
+`useNav()`, `useHeader()`, `useAside()`, `useFooter()` digunakan untuk memasukkan konten ke dalam tag layout di `index.html`. Masing-masing mengakses `#nav-go`, `#header-go`, `#aside-go`, dan `#footer-go`.
 
 ```js
-// Sisipkan konten ke dalam nav
 const nav = Helper.useNav();
 nav.onTheHtml("<a href='/'>Beranda</a>");
 
-// Sisipkan konten ke dalam header
 const header = Helper.useHeader();
 header.onTheHtml("<h1>Kobar App</h1>");
 ```
@@ -93,89 +100,220 @@ header.onTheHtml("<h1>Kobar App</h1>");
 
 ## 🎯 Element Method
 
-Semua method menggunakan format **camelCase** (huruf pertama kecil). Semua method bisa dirantai (chaining) dan otomatis menunggu element muncul di DOM.
+Semua method menggunakan format **camelCase**. Semua method bisa dirantai (**chaining**) dan otomatis menunggu element muncul di DOM.
+
+### Sistem Penamaan
+
+Method dibangun dari **prefix** (kata kerja) + **suffix** (target operasi), dengan pemisah khusus:
+
+| Pemisah | Kegunaan | Berlaku untuk |
+|---------|----------|---------------|
+| `Its` | Memisahkan nama dan nilai | `style`, `attr`, `data`, `html` |
+| `To` | Nilai lama → nilai baru | `changeThe` + `style`, `attr`, `data`, `class` |
+| `With` | Nilai A ↔ nilai B | `toggleThe` + semua |
+
+> **Mengapa `class` tidak pakai `Its`?**
+> Karena class hanya punya **nama**, tidak punya pasangan nama-nilai seperti style, attr, dan data.
+> Contoh: `onTheClassActive` cukup, tidak perlu `onTheClassItsActive`.
+
+---
 
 ### `onThe` — Tambah / Set
 
-| Method | Keterangan | Contoh |
-|---|---|---|
-| `onTheClick(fn)` | Tambah event listener | `.onTheClick(() => {})` |
-| `onTheFocus(fn)` | Event focus | `.onTheFocus(() => {})` |
-| `onTheClassName()` | Tambah class | `.onTheClassAktif()` |
-| `onTheStylePropertyItsValue()` | Set style | `.onTheStyleColorItsRed()` |
-| `onTheStyleWidthIts100Pct()` | Set style dengan % | `.onTheStyleWidthIts100Pct()` |
-| `onTheAttrNama(value)` | Set attribute dengan argumen | `.onTheAttrPlaceholder("Nama")` |
-| `onTheAttrNamaItsValue()` | Set attribute dengan nilai tetap | `.onTheAttrDisabledIts()` |
-| `onTheDataNamaItsValue()` | Set data attribute | `.onTheDataIdItsAbc()` |
-| `onTheTextNilai()` | Set teks inline | `.onTheTextSelamatDatang()` |
-| `onTheText(value)` | Set teks via argumen | `.onTheText("Halo!")` |
-| `onTheHtml(value)` | Set innerHTML via argumen | `.onTheHtml("<b>Halo</b>")` |
-| `onTheEach((el, i) => {})` | Loop semua element (NodeList/HTMLCollection) | `.onTheEach((e, i) => {})` |
+```js
+// Event
+el.onTheClick(fn)                       // addEventListener("click", fn)
+el.onTheFocus(fn)                       // addEventListener("focus", fn)
+
+// Class — hanya nama, tanpa Its
+el.onTheClassActive()                   // classList.add("active")
+el.onTheClassIsVisible()                // classList.add("is-visible")
+
+// Style — pakai Its untuk nilai
+el.onTheStyleColorItsRed()              // style.color = "red"
+el.onTheStyleFontSizeIts16px()          // style.fontSize = "16px"
+el.onTheStyleWidthIts50pct()            // style.width = "50%"  (pct → %)
+
+// Attr — tanpa Its: tambah attr kosong, dengan Its: set nilai
+el.onTheAttrDisabled()                  // setAttribute("disabled", "")
+el.onTheAttrTitleItsHello()             // setAttribute("title", "hello")
+el.onTheAttr("title", value)            // setAttribute("title", value)
+
+// Data — pakai Its untuk nilai
+el.onTheDataIdIts123()                  // setAttribute("data-id", "123")
+
+// Text
+el.onTheTextHelloWorld()                // textContent = "Hello World"
+el.onTheText(value)                     // textContent = value
+
+// Html
+el.onTheHtml(value)                     // innerHTML = value
+
+// Loop (NodeList / HTMLCollection)
+el.onTheEach((el, i) => {})             // iterasi semua element
+```
+
+---
 
 ### `offThe` — Hapus
 
-| Method | Keterangan | Contoh |
-|---|---|---|
-| `offTheClick(fn)` | Hapus event listener | `.offTheClick(fn)` |
-| `offTheClassName()` | Hapus class | `.offTheClassAktif()` |
-| `offTheStyleProperty()` | Hapus style | `.offTheStyleColor()` |
-| `offTheAttrNama()` | Hapus attribute | `.offTheAttrDisabled()` |
-| `offTheDataNama()` | Hapus data attribute | `.offTheDataId()` |
-
-### `toggleThe` — Toggle
-
-| Method | Keterangan | Contoh |
-|---|---|---|
-| `toggleTheClassName()` | Toggle class | `.toggleTheClassAktif()` |
-| `toggleTheClassaWithB()` | Toggle antara dua class | `.toggleTheClassOnWithOff()` |
-| `toggleTheStylePropItsaWithB()` | Toggle antara dua nilai style | `.toggleTheStyleColorItsBlueWithRed()` |
-
-### `changeThe` — Ganti
-
-| Method | Keterangan | Contoh |
-|---|---|---|
-| `changeTheText(value)` | Ganti teks via argumen | `.changeTheText("Baru")` |
-| `changeTheTextNilai()` | Ganti teks inline | `.changeTheTextHaloBaru()` |
-| `changeTheHtml(value)` | Ganti innerHTML | `.changeTheHtml("<p>Baru</p>")` |
-| `changeTheClassaToB()` | Ganti class | `.changeTheClassAktifToDisabled()` |
-
-### `checkThe` — Cek (mengembalikan boolean)
-
-| Method | Keterangan | Contoh |
-|---|---|---|
-| `checkTheClassName()` | Cek apakah class ada | `.checkTheClassAktif()` |
-| `checkTheAttrNama()` | Cek apakah attribute ada | `.checkTheAttrDisabled()` |
-| `checkTheAttrNamaItsValue()` | Cek nilai attribute | `.checkTheAttrTypeItsText()` |
-| `checkTheStyleProp()` | Cek apakah style ada | `.checkTheStyleColor()` |
-| `checkTheStylePropItsValue()` | Cek nilai style | `.checkTheStyleColorItsRed()` |
-| `checkTheDataNama()` | Cek apakah data ada | `.checkTheDataId()` |
-| `checkTheDataNamaItsValue()` | Cek nilai data | `.checkTheDataIdItsAbc()` |
-| `checkTheText(value)` | Cek teks via argumen | `.checkTheText("Halo")` |
-| `checkTheTextNilai()` | Cek teks inline | `.checkTheTextHalo()` |
-| `checkTheHtml(value)` | Cek innerHTML | `.checkTheHtml("<p>Halo</p>")` |
-
-### `html` — Akses DOM Langsung
-
-Prefix `html` memberikan akses ke **semua properti dan method DOM native** yang belum didukung secara langsung oleh Kobar. Format penulisan: `html` + nama properti/method DOM dalam camelCase.
-
 ```js
-// Getter — ambil nilai properti DOM
-const nilai = input.htmlValue();
-const tinggi = el.htmlOffsetHeight();
+// Event
+el.offTheClick(fn)                      // removeEventListener("click", fn)
 
-// Setter — set nilai properti DOM
-input.htmlValue("Teks baru");
-el.htmlId("nama-id");
+// Class — hanya nama, tanpa Its
+el.offTheClassActive()                  // classList.remove("active")
 
-// Method DOM
-input.htmlFocus();
-input.htmlBlur();
-el.htmlClick();
-el.htmlScrollIntoView();
-el.htmlAppend(kartu);
+// Style
+el.offTheStyleColor()                   // style.removeProperty("color")
+
+// Attr
+el.offTheAttrDisabled()                 // removeAttribute("disabled")
+
+// Data
+el.offTheDataId()                       // removeAttribute("data-id")
+
+// Text
+el.offTheText()                         // textContent = ""
 ```
 
-> Gunakan prefix `html` untuk mengakses properti atau method DOM apapun yang belum tersedia sebagai method Kobar.
+---
+
+### `changeThe` — Ubah ke Nilai Baru
+
+Untuk `class` pakai `To` saja. Untuk `style`, `attr`, `data` — `Its` boleh disertakan untuk memperjelas nilai lama, tapi diabaikan; yang dipakai hanya nilai setelah `To`.
+
+```js
+// Class — oldClass To newClass
+el.changeTheClassActiveToDisabled()     // replaceClass("active", "disabled")
+
+// Style — Its diabaikan, nilai diambil dari To
+el.changeTheStyleColorItsRedToBlue()    // style.color = "blue"
+
+// Attr — Its diabaikan, nilai diambil dari To
+el.changeTheAttrTitleItsHelloToWorld()  // setAttribute("title", "world")
+
+// Data — Its diabaikan, nilai diambil dari To
+el.changeTheDataIdIts1To2()             // setAttribute("data-id", "2")
+
+// Text
+el.changeTheTextHelloWorld()            // textContent = "Hello World"
+el.changeTheText(value)                 // textContent = value
+
+// Html
+el.changeTheHtml(value)                 // innerHTML = value
+```
+
+---
+
+### `toggleThe` — Bolak-balik
+
+Gunakan `With` untuk toggle antara dua nilai. Tanpa `With`, beberapa fitur toggle keberadaan (add/remove).
+
+```js
+// Class — tanpa With: toggle biasa, dengan With: swap dua class
+el.toggleTheClassActive()               // classList.toggle("active")
+el.toggleTheClassOpenWithClose()        // swap antara "open" dan "close"
+
+// Style — wajib pakai Its + With
+el.toggleTheStyleColorItsBlueWithRed()  // swap color antara "blue" dan "red"
+
+// Attr — tanpa With: toggle keberadaan, dengan With: swap nilai
+el.toggleTheAttrDisabled()              // add/remove attr "disabled"
+el.toggleTheAttrTitleItsHiWithBye()     // swap nilai title antara "hi" dan "bye"
+
+// Data — pakai Its + With
+el.toggleTheDataIdItsAWithB()           // swap data-id antara "a" dan "b"
+
+// Text — pakai With
+el.toggleTheTextOnWithOff()             // swap text antara "On" dan "Off"
+```
+
+---
+
+### `checkThe` — Cek (mengembalikan `boolean`)
+
+```js
+// Class
+el.checkTheClassActive()                // classList.contains("active") → boolean
+
+// Attr — tanpa Its: cek keberadaan, dengan Its: cek nilai
+el.checkTheAttrDisabled()               // hasAttribute("disabled") → boolean
+el.checkTheAttrTitleItsHello()          // getAttribute("title") === "hello" → boolean
+
+// Style — tanpa Its: cek ada/tidak, dengan Its: cek nilai spesifik
+el.checkTheStyleColor()                 // !!getPropertyValue("color") → boolean
+el.checkTheStyleColorItsRed()           // getPropertyValue("color") === "red" → boolean
+
+// Data — tanpa Its: cek ada/tidak, dengan Its: cek nilai spesifik
+el.checkTheDataId()                     // !!getAttribute("data-id") → boolean
+el.checkTheDataIdItsAbc()              // getAttribute("data-id") === "abc" → boolean
+
+// Text
+el.checkTheTextHello()                  // textContent === "Hello" → boolean
+el.checkTheText(value)                  // textContent === value → boolean
+
+// Html
+el.checkTheHtml(value)                  // innerHTML === value → boolean
+```
+
+---
+
+### `html` — Akses DOM Native Langsung
+
+Gunakan prefix `html` untuk mengakses **semua properti dan method DOM native** yang tidak tersedia lewat prefix di atas.
+
+Properti DOM punya tiga mode:
+- **Tanpa argumen** → getter, return nilai
+- **Dengan argumen** → setter via argumen
+- **Dengan `Its` inline** → setter via nama method, tanpa argumen
+
+```js
+// Method DOM (tidak punya getter/setter)
+el.htmlFocus()                          // el.focus()
+el.htmlBlur()                           // el.blur()
+el.htmlClick()                          // el.click()
+el.htmlScrollIntoView()                 // el.scrollIntoView()
+el.htmlAppend(node)                     // el.append(node)
+
+// Properti DOM — tiga mode
+el.htmlValue()                          // el.value (getter)
+el.htmlValue("abc")                     // el.value = "abc" (setter via argumen)
+el.htmlValueItsAbc()                    // el.value = "abc" (setter via Its)
+
+el.htmlChecked()                        // el.checked (getter)
+el.htmlChecked(true)                    // el.checked = true (setter via argumen)
+el.htmlCheckedItsTrue()                 // el.checked = "true" (setter via Its)
+
+el.htmlId()                             // el.id (getter)
+el.htmlIdItsMyBtn()                     // el.id = "my-btn" (setter via Its)
+
+el.htmlOffsetHeight()                   // el.offsetHeight (getter)
+```
+
+---
+
+### Chaining
+
+Semua method yang bersifat setter mendukung chaining:
+
+```js
+Helper.getElement("#btn")
+  .onTheClassActive()
+  .onTheStyleColorItsBlue()
+  .onTheAttrTitleItsHello()
+  .onTheClick(fn);
+```
+
+---
+
+### Konversi Otomatis
+
+| Input | Output |
+|-------|--------|
+| `camelCase` | `kebab-case` (untuk class, style, attr, data) |
+| `50pct` | `50%` (untuk nilai style) |
+| `HelloWorld` (text inline) | `"Hello World"` (dipisah per huruf kapital) |
 
 ---
 
@@ -195,7 +333,9 @@ Atur routing di `config/route.json`:
 
 ## 🧱 Component System
 
-Buat komponen di folder `components/` dengan tag `<comp-nama>`:
+### Buat Komponen
+
+Buat file di folder `components/` dengan tag `<comp-nama>`:
 
 ```html
 <!-- components/kartu.html -->
@@ -207,7 +347,7 @@ Buat komponen di folder `components/` dengan tag `<comp-nama>`:
 </comp-kartu>
 ```
 
-Load dan render via logic:
+### Load & Render via Logic
 
 ```js
 const { kartuProfil } = await Helper.useComponentFromKartu();
@@ -225,7 +365,7 @@ const items = kartuProfil.render([
 
 ### Inline Component di HTML
 
-Sisipkan komponen langsung di halaman:
+Sisipkan komponen langsung di halaman tanpa JavaScript:
 
 ```html
 <base comp="kartu" file="kartu" data-nama="Azqilana" data-pesan="Halo!">
@@ -235,7 +375,7 @@ Sisipkan komponen langsung di halaman:
 
 ## 🌐 Deploy
 
-Siap deploy ke **Netlify** atau **Cloudflare Pages** — sudah ada `_redirects` untuk SPA routing.
+Kobar siap deploy ke **Netlify** atau **Cloudflare Pages** — sudah ada `_redirects` untuk SPA routing.
 
 ---
 

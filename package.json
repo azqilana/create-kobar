@@ -1,6 +1,6 @@
 {
   "name": "create-kobar",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "CLI scaffold untuk membuat project Kobar",
   "type": "module",
   "bin": {

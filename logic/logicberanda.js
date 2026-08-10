@@ -20,7 +20,7 @@ Helper.register("beranda", async () => {
     "#status",
     ".card",
     ".cardini",
-    "all:.kartu-pesan",
+    "all:.kartu-profil",
   );
 
   const { kartuProfil, badge } = await Helper.useComponentFromKartu();
@@ -30,7 +30,7 @@ Helper.register("beranda", async () => {
   console.log(comp);
   // Kalau tidak punya slot data
   // const html = badge._html;
-  let data = [];
+  let data;
   tombol
     .onTheStyleBackgroundColorItsBlue()
     .onTheStyleColorItsWhite()
@@ -43,8 +43,10 @@ Helper.register("beranda", async () => {
   });
   kartuPesan.onTheEach((e) => {
     e.onTheStyleBackgroundColorItsBlue();
+    e.onTheStylePaddingIts10px();
+    e.onTheStyleMarginIts10px();
+    e.onTheStyleBorderRadiusIts10px();
   });
-  cardini.onTheStyleBackgroundColorItsYellow();
   cardini.onTheStylePaddingIts10px();
   cardini.onTheStyleMarginIts10px();
   cardini.onTheStyleTextAlignItsCenter();
@@ -58,15 +60,30 @@ Helper.register("beranda", async () => {
       status.onTheTextIsiDuluNamaMu();
       return;
     }
+    kartuPesan.onTheEach((e) => {
+      e.toggleTheStyleBackgroundColorItsYellowWithCyan();
+    });
+
     input.htmlValue("");
     console.log(nilai);
-    const itemBaru = { nama: nilai, pesan: "Selamat Datang" };
-    data.push(itemBaru);
-    const kartu = kartuProfil.render(itemBaru).element;
-    cardini.htmlAppend(kartu);
-    judul.changeTheText(`Halo, ${nilai}!`);
+    const itemBaru = { nama: nilai, pesan: "Terima Kasih Atas Kehadiran Nya" };
+    data = itemBaru;
+    const kartu = kartuProfil.data(itemBaru);
+    cardini.onTheHtml(kartu);
+    cardini.toggleTheStyleBackgroundColorItsGreenWithBlue();
+    cardini.toggleTheStyleColorItsBlueWithDarkgreen();
+    judul.changeTheText(`Hai, ${nilai}!`);
+    judul.onTheStyleBackgroundColorItsBlack();
+    judul.onTheStyleColorItsBlue();
+    judul.onTheStylePaddingIts10px();
+    judul.onTheStyleBorderRadiusIts10px();
     subjudul.onTheTextSelamatDatang();
-    status.onTheTextBerhasil().onTheClassAktif();
+    status
+      .onTheTextBerhasil()
+      .onTheClassAktif()
+      .onTheStyleColorItsGreenyellow()
+      .onTheStyleBackgroundColorItsBlack()
+      .onTheStylePaddingIts20px();
   });
 
   // Toggle warna judul
