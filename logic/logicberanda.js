@@ -61,7 +61,7 @@ Kobar.register("beranda", async () => {
       return;
     }
     kartuPesan.onTheEach((e) => {
-      e.toggleTheStyleBackgroundColorItsYellowWithCyan();
+      e.toggleTheStyleBackgroundColorItsYellowgreenWithCyan();
     });
 
     input.htmlValue("");

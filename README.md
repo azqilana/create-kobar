@@ -76,7 +76,7 @@ const judul = Kobar.getElement("#judul");
 const [input, tombol] = Kobar.getElement("#input", "#tombol");
 ```
 
-### `Kobar.getElementByIdNama()` · `Kobar.getElementByClassNama()` · dst.
+### `Kobar.getElementByIdNama()` · `Kobar.getElementClassNama()` · dst.
 
 Alternatif pengambilan element dengan gaya penamaan dinamis — tanpa perlu menulis selector string. Hasilnya sama dengan `getElement`, yaitu instance dengan method berantai.
 
@@ -150,6 +150,17 @@ Method dibangun dari **prefix** (kata kerja) + **suffix** (target operasi), deng
 > **Mengapa `class` tidak pakai `Its`?**
 > Karena class hanya punya **nama**, tidak punya pasangan nama-nilai seperti style, attr, dan data.
 > Contoh: `onTheClassActive` cukup, tidak perlu `onTheClassItsActive`.
+
+> **Aturan penulisan nama class & attr:**
+> Nama **class** dan **attr** di element **harus huruf kecil semua** atau **kebab-case**.
+> Sistem secara otomatis mengkonversi camelCase → kebab-case, sehingga nama yang pakai camelCase di CSS/HTML tidak akan cocok.
+>
+> | Penulisan di method | Hasil |
+> |---------------------|-------|
+> | `onTheClassIsVisible` | `is-visible` ✅ |
+> | `onTheClassBtnPrimary` | `btn-primary` ✅ |
+> | `onTheDataType` | `data-type` ✅ |
+> | `onTheAttrAriaLabel` | `aria-label` ✅ |
 
 ---
 
@@ -416,4 +427,4 @@ Kobar siap deploy ke **Netlify** atau **Cloudflare Pages** — sudah ada `_redir
 
 ## 📄 Lisensi
 
-MIT © [azqilana](https://github.com/azqilana)
+GPL-V3 © [azqilana](https://github.com/azqilana)
