@@ -35,7 +35,7 @@ nama-project/
 ├── system/           # Core Kobar
 ├── _redirects        # Redirect untuk Netlify/Cloudflare
 ├── index.html        # Entry point HTML
-└── index.js          # Entry point JS & Helper
+└── index.js          # Entry point JS & Kobar
 ```
 
 ---
@@ -43,91 +43,91 @@ nama-project/
 ## 📦 Entry Point — `index.js`
 
 ```js
-import Helper from "../index.js";
+import Kobar from "../index.js";
 ```
 
 `index.js` adalah **satu-satunya pintu masuk** ke semua fitur Kobar:
 
 - **Auto-start app** — routing otomatis aktif begitu file di-load, tidak perlu setup manual
-- **Helper siap pakai** — `getElement`, `register`, `useNav`, `useHeader`, dll sudah tersedia
+- **Kobar siap pakai** — `getElement`, `register`, `useNav`, `useHeader`, dll sudah tersedia
 - **Component proxy** — akses komponen dari file manapun secara dinamis via `useComponentFromNamaFile`
 - **Satu import, semua tersedia** — tidak perlu import tiap file `system/` satu per satu
 
 ---
 
-## 🧩 Helper API
+## 🧩 Kobar API
 
-### `Helper.register(nama, fn)`
+### `Kobar.register(nama, fn)`
 
 Daftarkan logic untuk halaman tertentu.
 
 ```js
-Helper.register("beranda", async () => {
+Kobar.register("beranda", async () => {
   // logic halaman beranda
 });
 ```
 
-### `Helper.getElement(...selector)`
+### `Kobar.getElement(...selector)`
 
 Ambil satu atau banyak element sekaligus menggunakan CSS selector. Mengembalikan instance dengan method berantai.
 
 ```js
-const judul = Helper.getElement("#judul");
-const [input, tombol] = Helper.getElement("#input", "#tombol");
+const judul = Kobar.getElement("#judul");
+const [input, tombol] = Kobar.getElement("#input", "#tombol");
 ```
 
-### `Helper.getElementByIdNama()` · `Helper.getElementByClassNama()` · dst.
+### `Kobar.getElementByIdNama()` · `Kobar.getElementByClassNama()` · dst.
 
 Alternatif pengambilan element dengan gaya penamaan dinamis — tanpa perlu menulis selector string. Hasilnya sama dengan `getElement`, yaitu instance dengan method berantai.
 
 | Method | Setara dengan |
 |--------|---------------|
-| `Helper.getElementByIdNama()` | `document.getElementById("nama")` |
-| `Helper.getElementClassNama()` | `document.getElementsByClassName("nama")` |
-| `Helper.getElementTagDiv()` | `document.getElementsByTagName("div")` |
-| `Helper.getElementNameEmail()` | `document.getElementsByName("email")` |
-| `Helper.getElementAllNama()` | `document.querySelectorAll("nama")` |
-| `Helper.getElementNama()` | `document.querySelector("nama")` |
+| `Kobar.getElementByIdNama()` | `document.getElementById("nama")` |
+| `Kobar.getElementClassNama()` | `document.getElementsByClassName("nama")` |
+| `Kobar.getElementTagDiv()` | `document.getElementsByTagName("div")` |
+| `Kobar.getElementNameEmail()` | `document.getElementsByName("email")` |
+| `Kobar.getElementAllNama()` | `document.querySelectorAll("nama")` |
+| `Kobar.getElementNama()` | `document.querySelector("nama")` |
 
 ```js
 // Ambil by ID
-const judul = Helper.getElementByIdJudul();
+const judul = Kobar.getElementByIdJudul();
 
 // Ambil by class
-const kartu = Helper.getElementClassKartu();
+const kartu = Kobar.getElementClassKartu();
 
 // Ambil by tag
-const divs = Helper.getElementTagDiv();
+const divs = Kobar.getElementTagDiv();
 
 // Ambil by name
-const email = Helper.getElementNameEmail();
+const email = Kobar.getElementNameEmail();
 
 // Ambil semua (querySelectorAll)
-const items = Helper.getElementAllItem();
+const items = Kobar.getElementAllItem();
 
 // Fallback querySelector biasa
-const el = Helper.getElementMainContent();
+const el = Kobar.getElementMainContent();
 ```
 
-> `getElement(selector)` dan `getElementBy*` saling melengkapi — gunakan mana yang lebih nyaman sesuai konteks.
+> `getElement(selector)` dan `getElement*` saling melengkapi — gunakan mana yang lebih nyaman sesuai konteks.
 
-### `Helper.useComponentFromNamaFile()`
+### `Kobar.useComponentFromNamaFile()`
 
 Load komponen dari folder `components/`. Nama file ditulis dalam PascalCase setelah `useComponentFrom`.
 
 ```js
-const { kartuProfil } = await Helper.useComponentFromKartu();
+const { kartuProfil } = await Kobar.useComponentFromKartu();
 ```
 
-### Layout Helpers
+### Layout Kobars
 
 `useNav()`, `useHeader()`, `useAside()`, `useFooter()` digunakan untuk memasukkan konten ke dalam tag layout di `index.html`. Masing-masing mengakses `#nav-go`, `#header-go`, `#aside-go`, dan `#footer-go`.
 
 ```js
-const nav = Helper.useNav();
+const nav = Kobar.useNav();
 nav.onTheHtml("<a href='/'>Beranda</a>");
 
-const header = Helper.useHeader();
+const header = Kobar.useHeader();
 header.onTheHtml("<h1>Kobar App</h1>");
 ```
 
@@ -333,7 +333,7 @@ el.htmlOffsetHeight()                   // el.offsetHeight (getter)
 Semua method yang bersifat setter mendukung chaining:
 
 ```js
-Helper.getElement("#btn")
+Kobar.getElement("#btn")
   .onTheClassActive()
   .onTheStyleColorItsBlue()
   .onTheAttrTitleItsHello()
@@ -385,7 +385,7 @@ Buat file di folder `components/` dengan tag `<comp-nama>`:
 ### Load & Render via Logic
 
 ```js
-const { kartuProfil } = await Helper.useComponentFromKartu();
+const { kartuProfil } = await Kobar.useComponentFromKartu();
 
 // Render satu item
 const kartu = kartuProfil.render({ nama: "Azqilana", pesan: "Halo!" });

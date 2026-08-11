@@ -28,9 +28,9 @@ class Helper {
   }
 }
 
-const helper = new Helper();
+const kobar = new Helper();
 
-export default new Proxy(helper, {
+export default new Proxy(kobar, {
   get(target, key) {
     if (key in target) return target[key];
     if (typeof key === "string" && key.startsWith("useComponentFrom")) {

@@ -1,6 +1,6 @@
-import Helper from "../index.js";
+import Kobar from "../index.js";
 
-Helper.register("beranda", async () => {
+Kobar.register("beranda", async () => {
   const [
     judul,
     subjudul,
@@ -11,7 +11,7 @@ Helper.register("beranda", async () => {
     card,
     cardini,
     kartuPesan,
-  ] = Helper.getElement(
+  ] = Kobar.getElement(
     "#judul",
     "#subjudul",
     "#input",
@@ -23,10 +23,10 @@ Helper.register("beranda", async () => {
     "all:.kartu-profil",
   );
 
-  const { kartuProfil, badge } = await Helper.useComponentFromKartu();
+  const { kartuProfil, badge } = await Kobar.useComponentFromKartu();
   console.log(kartuProfil);
   console.log(badge);
-  const comp = await Helper.useComponentFromKartu();
+  const comp = await Kobar.useComponentFromKartu();
   console.log(comp);
   // Kalau tidak punya slot data
   // const html = badge._html;
