@@ -1,5 +1,6 @@
 import { load } from "./route.js";
 import { runPageInit } from "./registry.js";
+import { injectData } from "./inject.js";
 
 const page = document.querySelector("main");
 const style = document.querySelector("style");
@@ -43,22 +44,7 @@ async function resolveComponents(htmlString) {
     const compEl = compDoc.querySelector(`comp-${compName}`);
     if (!compEl) continue;
     let compHtml = compEl.innerHTML.trim();
-
-    // Inject data ke slot <meta this-data="...">
-    const slotDoc = parser.parseFromString(compHtml, "text/html");
-    slotDoc.querySelectorAll("[this-data]").forEach((slot) => {
-      const key = slot.getAttribute("this-data");
-      if (!(key in data)) return;
-      if (slot.tagName.toLowerCase() === "meta") {
-        slot.replaceWith(data[key]);
-      } else {
-        slot.removeAttribute("this-data");
-        slot.setAttribute(`data-${key}`, data[key]);
-      }
-    });
-    compHtml = slotDoc.body.innerHTML;
-
-    // Replace tag <base> dengan hasil
+    compHtml = injectData(compHtml, data);
     const template = doc.createElement("template");
     template.innerHTML = compHtml;
     el.replaceWith(template.content.cloneNode(true));

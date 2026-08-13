@@ -26,9 +26,16 @@ document.addEventListener("click", (e) => {
   if (!anchor) return;
   const url = anchor.getAttribute("href");
   if (url) {
-    const isExcluded = ["http://", "https://", "mailto:", "tel:", "#"].some(
-      (ex) => url.includes(ex),
-    );
+    const isExcluded = [
+      "http://",
+      "https://",
+      "mailto:",
+      "tel:",
+      "#",
+      ".id",
+      ".com",
+      ".net",
+    ].some((ex) => url.includes(ex));
     if (!isExcluded) {
       e.preventDefault();
       history.pushState({}, "", url);

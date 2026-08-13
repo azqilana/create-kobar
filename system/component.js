@@ -1,6 +1,6 @@
 import getelemen from "./observer.js";
 import { load } from "./route.js";
-
+import { injectData } from "./inject.js";
 // — Helper —
 
 const toCamelCase = (str) =>
@@ -43,24 +43,6 @@ export function parseComponents(htmlString, fileName) {
 function hasDataSlot(htmlString) {
   const doc = new DOMParser().parseFromString(htmlString, "text/html");
   return doc.querySelector("[this-data]") !== null;
-}
-
-// — Inject data ke slot this-* —
-
-export function injectData(htmlString, data) {
-  const doc = new DOMParser().parseFromString(htmlString, "text/html");
-  doc.querySelectorAll("[this-data]").forEach((el) => {
-    const key = el.getAttribute("this-data");
-    if (!(key in data)) return;
-
-    if (el.tagName.toLowerCase() === "meta") {
-      el.replaceWith(data[key]);
-    } else {
-      el.removeAttribute("this-data");
-      el.setAttribute(`data-${key}`, data[key]);
-    }
-  });
-  return doc.body.innerHTML;
 }
 
 function renderComponent(htmlString) {

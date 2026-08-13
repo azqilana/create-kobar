@@ -419,6 +419,166 @@ Sisipkan komponen langsung di halaman tanpa JavaScript:
 
 ---
 
+### Slot Data — 3 Cara Menangkap Data
+
+Kobar mendukung tiga cara injeksi data ke dalam komponen:
+
+#### 1. `<meta this-data="key">` — Replace jadi teks
+
+Tag `<meta>` akan diganti langsung dengan nilai dari data.
+
+```html
+<comp-kartu>
+  <div class="kartu">
+    <p><meta this-data="pesan"></p>
+    <h2><meta this-data="nama"></h2>
+  </div>
+</comp-kartu>
+```
+
+```js
+kartu.render({ nama: "Azqilana", pesan: "Halo!" });
+// → <div class="kartu"><p>Halo!</p><h2>Azqilana</h2></div>
+```
+
+#### 2. `this-data="key"` — Jadi atribut `data-*`
+
+Pada elemen selain `<meta>`, atribut `this-data` akan diubah menjadi `data-*`.
+
+```html
+<comp-kartu>
+  <div this-data="id" class="kartu">...</div>
+</comp-kartu>
+```
+
+```js
+kartu.render({ id: "123" });
+// → <div data-id="123" class="kartu">...</div>
+```
+
+#### 3. `this-data-{attr}="key"` — Inject langsung ke atribut HTML
+
+Gunakan `this-data-{namaAtribut}` untuk mengisi atribut HTML secara langsung seperti `href`, `src`, `action`, dll. Atribut `this-data-*` akan dihapus dan diganti dengan atribut yang sesuai.
+
+```html
+<comp-kartu>
+  <a this-data-href="url" this-data-src="gambar">Klik</a>
+</comp-kartu>
+```
+
+```js
+kartu.render({ url: "/profil", gambar: "/foto.jpg" });
+// → <a href="/profil" src="/foto.jpg">Klik</a>
+```
+
+---
+
+## 🏗️ Build — `Kobar.build*()`
+
+Kobar menyediakan cara membuat HTML string secara programatik tanpa menyentuh DOM lewat **proxy dinamis**. Cocok dipakai di dalam logic halaman untuk membangun konten secara dinamis.
+
+### 1. Tag — `build{Tag}`
+
+Tulis nama tag setelah `build` dalam PascalCase. Jika tag tidak ditulis, default jadi `div`.
+
+```js
+Kobar.buildDiv({ children: "Konten" })
+// → '<div>Konten</div>'
+
+Kobar.buildP({ children: "Paragraf" })
+// → '<p>Paragraf</p>'
+```
+
+### 2. Class — `WithClassThis{NamaClass}`
+
+Gunakan `WithClass` diikuti `This` dan nama class.
+
+```js
+Kobar.buildDivWithClassThisCard({ children: "Isi" })
+// → '<div class="card">Isi</div>'
+```
+
+### 3. Atribut — `WithAttrThis{NamaAttr}Its{NilaiAttr}`
+
+Gunakan `WithAttr` diikuti `This` untuk nama atribut dan `Its` untuk nilainya.
+
+```js
+Kobar.buildAWithAttrThisHrefItsHome({ children: "Klik" })
+// → '<a href="home">Klik</a>'
+```
+
+Bisa digabung semua sekaligus:
+
+```js
+Kobar.buildAWithClassThisBtnWithAttrThisHrefItsHome({ children: "Klik" })
+// → '<a class="btn" href="home">Klik</a>'
+```
+
+### 4. Children — `{ children }`
+
+`children` bisa berupa string atau array of object untuk elemen bertingkat.
+
+```js
+// String
+Kobar.buildDiv({ children: "Halo" })
+// → '<div>Halo</div>'
+
+// Array (nested)
+Kobar.buildDivWithClassThisCard({
+  children: [
+    { tag: "h1", children: "Judul" },
+    { tag: "p", children: "Isi" }
+  ]
+})
+// → '<div class="card"><h1>Judul</h1><p>Isi</p></div>'
+
+// Array of object (banyak elemen sekaligus)
+Kobar.build([
+  { tag: "h1", children: "Judul" },
+  { tag: "p", children: "Paragraf" }
+])
+// → '<h1>Judul</h1><p>Paragraf</p>'
+```
+
+### 5. Tag Self-Closing
+
+Tag self-closing (`img`, `input`, `br`, `hr`, dll) otomatis tidak diberi closing tag.
+
+```js
+Kobar.buildImgWithAttrThisSrcItsPhoto({})
+// → '<img src="photo" />'
+```
+
+### 6. Inject Data — 3 Cara
+
+`build*()` mendukung chaining dengan method `.data()` untuk inject data secara dinamis, dengan cara yang sama seperti komponen.
+
+#### 1. `<meta this-data="key">` — Replace jadi teks
+
+```js
+Kobar.buildDiv({ children: `<p><meta this-data="pesan"></p>` })
+  .data({ pesan: "Halo!" })
+// → '<div><p>Halo!</p></div>'
+```
+
+#### 2. `this-data="key"` — Jadi atribut `data-*`
+
+```js
+Kobar.buildDiv({ children: `<div this-data="id"></div>` })
+  .data({ id: "123" })
+// → '<div><div data-id="123"></div></div>'
+```
+
+#### 3. `this-data-{attr}="key"` — Inject langsung ke atribut HTML
+
+```js
+Kobar.buildDiv({ children: `<a this-data-href="url">Klik</a>` })
+  .data({ url: "/profil" })
+// → '<div><a href="/profil">Klik</a></div>'
+```
+
+---
+
 ## 🌐 Deploy
 
 Kobar siap deploy ke **Netlify** atau **Cloudflare Pages** — sudah ada `_redirects` untuk SPA routing.

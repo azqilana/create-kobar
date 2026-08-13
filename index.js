@@ -3,6 +3,7 @@ import getelemen from "./system/observer.js";
 import { registerPage } from "./system/registry.js";
 import { component } from "./system/component.js";
 import { domProxy } from "./system/dom-proxy.js";
+import { el } from "./system/builder.js";
 
 class Helper {
   getElement(...selector) {
@@ -38,6 +39,9 @@ export default new Proxy(kobar, {
     }
     if (typeof key === "string" && key.startsWith("getElement")) {
       return domProxy[key];
+    }
+    if (typeof key === "string" && key.startsWith("build")) {
+      return el[key];
     }
   },
 });

@@ -51,7 +51,15 @@ Kobar.register("beranda", async () => {
   cardini.onTheStyleMarginIts10px();
   cardini.onTheStyleTextAlignItsCenter();
   cardini.onTheStyleBorderRadiusIts10px();
-  // Klik tombol kirim
+  const img = Kobar.build({
+    tag: "img",
+    class: "gambar",
+    attr: { src: "./assets/logo.png" },
+  }).done();
+  const gambar = Kobar.getElement(".gambar");
+  gambar.onTheStyleWidthIts100px();
+  judul.htmlInsertAdjacentHTML("beforeBegin", img.string);
+  console.log(img);
   tombol.onTheClick(() => {
     const nilai = input.htmlValue(); // akses .el untuk nilai asli
     console.log(nilai);
@@ -66,7 +74,11 @@ Kobar.register("beranda", async () => {
 
     input.htmlValue("");
     console.log(nilai);
-    const itemBaru = { nama: nilai, pesan: "Terima Kasih Atas Kehadiran Nya" };
+    const itemBaru = {
+      nama: nilai,
+      pesan: "Terima Kasih Atas Kehadiran Nya",
+      url: "https://azqilana.my.id",
+    };
     data = itemBaru;
     const kartu = kartuProfil.data(itemBaru);
     cardini.onTheHtml(kartu);
