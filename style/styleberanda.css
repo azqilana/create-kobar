@@ -1,36 +1,426 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap");
+
 * {
-  margin: 0px;
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
-  text-align: center;
-  height: 99vh;
-  margin: 10px;
-  padding: 20px;
-  background-color:gold;
+  font-family: "Nunito", sans-serif;
+  background-color: #f0f0f0;
+  min-height: 100vh;
+  padding: 24px 16px;
 }
-.card {
-  border: 2px solid blue;
-  padding: 30px;
-  margin: 20px auto;
-  background-color: darkgreen;
-  border-radius: 15px;
-  display: grid;
-  align-items: center;
-}
-#input,
-#tombol,
-#tombolToggle {
-  width: 80%;
-  padding: 10px;
-  margin: 15px auto;
-  border-radius: 15px;
-  font-size: 1.3rem;
-  font-weight: bold;
-}
-.status {
-  border-radius: 20px;
+
+/* ── Judul ── */
+h1 {
+  font-size: 2rem;
   font-weight: 900;
-  font-size: 1.2em;
+  color: #fff;
+  background-color: #1a1aff;
+  display: block;
+  width: fit-content;
+  padding: 10px 24px;
+  border-radius: 12px;
+  border: 3px solid #000;
+  outline: 3px solid #1a1aff;
+  outline-offset: 3px;
+  box-shadow: 5px 5px 0px #000;
+  margin: 0 auto 8px auto;
+  letter-spacing: -0.5px;
+}
+
+.gambar {
+  display: block;
+  width: 80px;
+  margin: 0 auto 8px auto;
+}
+
+h2 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* ── Card utama ── */
+.card {
+  background-color: #fff;
+  border: 3px solid #000;
+  border-radius: 16px;
+  padding: 28px 20px;
+  margin: 20px auto;
+  max-width: 480px;
+  box-shadow: 6px 6px 0px #000;
+  display: grid;
+  gap: 12px;
+}
+
+/* ── Input ── */
+#input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: "Nunito", sans-serif;
+  border: 3px solid #000;
+  border-radius: 10px;
+  outline: none;
+  box-shadow: 3px 3px 0px #000;
+  background: #fffbe6;
+  transition: box-shadow 0.15s;
+}
+
+#input:focus {
+  box-shadow: 4px 4px 0px #1a1aff;
+  border-color: #1a1aff;
+}
+
+#input.error {
+  border-color: #e8000d;
+  box-shadow: 4px 4px 0px #e8000d;
+  background: #fff0f0;
+}
+
+/* ── Tombol Kirim ── */
+#tombol {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: 900;
+  font-family: "Nunito", sans-serif;
+  color: #fff;
+  background-color: #1a1aff;
+  border: 3px solid #000;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px #000;
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s;
+}
+
+#tombol:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #000;
+}
+
+#tombol:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0px #000;
+}
+
+/* ── Tombol Toggle ── */
+#tombolToggle {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 800;
+  font-family: "Nunito", sans-serif;
+  color: #000;
+  background-color: #ff8c00;
+  border: 3px solid #000;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px #000;
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s;
+}
+
+#tombolToggle:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #000;
+}
+
+#tombolToggle:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0px #000;
+}
+
+/* ── Status ── */
+.status {
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 10px 16px;
+  border-radius: 8px;
+  min-height: 20px;
+}
+
+.status.aktif {
+  background: #1fbb00;
+  color: #fff;
+  border: 2px solid #000;
+  box-shadow: 3px 3px 0px #000;
+}
+
+/* ── Daftar ── */
+#kontainer-daftar {
+  margin: 20px auto;
+  max-width: 480px;
+}
+
+#daftar {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  background: #fff;
+  border: 3px solid #000;
+  border-radius: 16px;
+  box-shadow: 6px 6px 0px #000;
+}
+
+.item-daftar {
+  padding: 10px 14px;
+  border: 2px solid #000;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 1rem;
+  box-shadow: 3px 3px 0px #000;
+}
+
+/* ── Kotak Animasi ── */
+#kotak-animasi {
+  max-width: 240px;
+  margin: 12px auto;
+  background: #e8000d;
+  color: #fff;
+  font-weight: 900;
+  font-size: 1.1rem;
+  border: 3px solid #000;
+  border-radius: 12px;
+  box-shadow: 5px 5px 0px #000;
+  padding: 20px;
+}
+
+/* ── Tombol generik (fade, scroll, clone, dll) ── */
+#tombol-fade,
+#tombol-scroll-bawah,
+#tombol-scroll-atas,
+#tombol-clone,
+#tombol-hapus-terakhir,
+#tombol-info,
+#tombol-serialize {
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 800;
+  font-family: "Nunito", sans-serif;
+  color: #fff;
+  border: 3px solid #000;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px #000;
+  margin: 6px 0;
+  width: 100%;
+  max-width: 480px;
+  display: block;
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s;
+}
+
+#tombol-fade {
+  background: #e8000d;
+}
+#tombol-scroll-bawah {
+  background: #1a1aff;
+}
+#tombol-scroll-atas {
+  background: #1fbb00;
+}
+#tombol-clone {
+  background: #ff8c00;
+  color: #000;
+}
+#tombol-hapus-terakhir {
+  background: #e8000d;
+}
+#tombol-info {
+  background: #1a1aff;
+}
+#tombol-serialize {
+  background: #1fbb00;
+}
+
+#tombol-fade:hover,
+#tombol-scroll-bawah:hover,
+#tombol-scroll-atas:hover,
+#tombol-clone:hover,
+#tombol-hapus-terakhir:hover,
+#tombol-info:hover,
+#tombol-serialize:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #000;
+}
+
+#tombol-fade:active,
+#tombol-scroll-bawah:active,
+#tombol-scroll-atas:active,
+#tombol-clone:active,
+#tombol-hapus-terakhir:active,
+#tombol-info:active,
+#tombol-serialize:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0px #000;
+}
+
+/* ── Kotak Scroll ── */
+#kotak-scroll {
+  height: 150px;
+  overflow-y: auto;
+  border: 3px solid #000;
+  border-radius: 12px;
+  margin: 8px auto;
+  max-width: 480px;
+  padding: 12px 16px;
+  background: #fff;
+  box-shadow: 4px 4px 0px #000;
+  font-weight: 700;
+  line-height: 2;
+}
+
+/* ── Form Kontak ── */
+#form-kontak {
+  margin: 20px auto;
+  max-width: 480px;
+  padding: 20px;
+  background: #fff;
+  border: 3px solid #000;
+  border-radius: 16px;
+  box-shadow: 6px 6px 0px #000;
+  display: grid;
+  gap: 10px;
+}
+
+#form-kontak input,
+#form-kontak select {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: "Nunito", sans-serif;
+  border: 3px solid #000;
+  border-radius: 8px;
+  box-shadow: 3px 3px 0px #000;
+  background: #fffbe6;
+  outline: none;
+}
+
+/* ── Hasil pre — tersembunyi jika kosong ── */
+#hasil-serialize,
+#hasil-info {
+  margin: 8px auto;
+  max-width: 480px;
+  padding: 14px 16px;
+  background: #1a1a2e;
+  color: #1fbb00;
+  border: 3px solid #000;
+  border-radius: 12px;
+  box-shadow: 4px 4px 0px #000;
+  font-family: monospace;
+  font-size: 0.9rem;
+  text-align: left;
+  white-space: pre-wrap;
+  display: none;
+}
+
+#hasil-serialize:not(:empty),
+#hasil-info:not(:empty) {
+  display: block;
+}
+
+/* ── Area Clone ── */
+#area-clone {
+  margin: 12px auto;
+  max-width: 480px;
+  display: grid;
+  gap: 8px;
+}
+
+#kartu-template {
+  padding: 14px 16px;
+  background: #ff8c00;
+  color: #000;
+  font-weight: 800;
+  border: 3px solid #000;
+  border-radius: 10px;
+  box-shadow: 4px 4px 0px #000;
+}
+
+/* ── Area Kartu Profil ── */
+#area-kartu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+.kartu-item {
+  padding: 12px 20px;
+  background: #1a1aff;
+  color: #fff;
+  font-weight: 800;
+  font-size: 1rem;
+  border: 3px solid #000;
+  border-radius: 10px;
+  box-shadow: 4px 4px 0px #000;
+  min-width: 120px;
+  text-align: center;
+}
+
+/* ── cardini ── */
+.cardini {
+  margin: 12px auto;
+  max-width: 480px;
+  padding: 16px;
+  border: 3px solid #000;
+  border-radius: 14px;
+  box-shadow: 5px 5px 0px #000;
+  font-weight: 700;
+  background: #fff;
+}
+
+/* ── Scrollbar custom ── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: #000;
+  border-radius: 4px;
+  border: 2px solid #f0f0f0;
+}
+
+/* ── Section wrapper — beri jarak antar bagian ── */
+body > * {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Teks kecil via dom ── */
+p[style*="font-size:0.8em"] {
+  font-size: 0.75rem !important;
+  color: #aaa !important;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* ── Wrapper tombol berpasangan ── */
+.tombol-grup {
+  display: flex;
+  gap: 10px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.tombol-grup button {
+  flex: 1;
+  margin: 6px 0 !important;
 }

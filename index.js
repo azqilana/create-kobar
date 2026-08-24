@@ -1,9 +1,11 @@
-import "./system/app.js";
-import getelemen from "./system/observer.js";
-import { registerPage } from "./system/registry.js";
-import { component } from "./system/component.js";
-import { domProxy } from "./system/dom-proxy.js";
-import { el } from "./system/builder.js";
+import {
+  getelemen,
+  registerPage,
+  component,
+  domProxy,
+  el,
+  load,
+} from "./system/bundle.js";
 
 class Helper {
   getElement(...selector) {
@@ -14,6 +16,9 @@ class Helper {
   }
   register(name, intFunc) {
     return registerPage(name, intFunc);
+  }
+  async useData(data) {
+    return await load(data);
   }
   useNav() {
     return this.getElement("#nav-go");
@@ -26,6 +31,12 @@ class Helper {
   }
   useFooter() {
     return this.getElement("#footer-go");
+  }
+  useBody() {
+    return this.getElement("body");
+  }
+  useRoot() {
+    return this.getElement("html");
   }
 }
 

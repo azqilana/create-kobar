@@ -1,16 +1,72 @@
 <h1 id="judul">Selamat Datang</h1>
-<h2 id="subjudul">Masukkan nama kamu</h2>
-<div class="cardini">
-  <base
-    comp="kartu"
-    file="kartu"
-    data-nama="Azqilana"
-    data-pesan="Terima Kasih Atas Kehadiran Nya"
-  />
-</div>
+<h2 id="subjudul">Masukkan Nama Kamu</h2>
+
+<!-- Form Input -->
 <div class="card">
   <input id="input" type="text" placeholder="Nama kamu..." />
   <button id="tombol">Kirim</button>
-  <button id="tombolToggle">Tekan</button>
+  <button id="tombolToggle">Toggle Tema</button>
   <p class="status" id="status"></p>
 </div>
+
+<div class="cardini"></div>
+
+<!-- Traversal -->
+<div id="kontainer-daftar">
+  <ul id="daftar">
+    <li class="item-daftar">Item Pertama</li>
+    <li class="item-daftar">Item Kedua</li>
+    <li class="item-daftar">Item Ketiga</li>
+    <li class="item-daftar">Item Keempat</li>
+  </ul>
+</div>
+
+<!-- Animasi -->
+<div id="kotak-animasi" style="display: none">Kotak Animasi</div>
+<button id="tombol-fade">Tampilkan / Sembunyikan</button>
+
+<!-- Scroll -->
+<div id="kotak-scroll">
+  <p>Baris 1</p>
+  <p>Baris 2</p>
+  <p>Baris 3</p>
+  <p>Baris 4</p>
+  <p>Baris 5</p>
+  <p>Baris 6</p>
+  <p>Baris 7</p>
+  <p>Baris 8</p>
+  <p>Baris 9</p>
+</div>
+<div class="tombol-grup">
+  <button id="tombol-scroll-bawah">Scroll Bawah</button>
+  <button id="tombol-scroll-atas">Scroll Atas</button>
+</div>
+
+<!-- Form Serialize -->
+<form id="form-kontak">
+  <input name="nama" type="text" placeholder="Nama" />
+  <input name="email" type="email" placeholder="Email" />
+  <select name="kategori">
+    <option value="saran">Saran</option>
+    <option value="keluhan">Keluhan</option>
+    <option value="lainnya">Lainnya</option>
+  </select>
+  <button type="button" id="tombol-serialize">Lihat Data Form</button>
+</form>
+<pre id="hasil-serialize"></pre>
+
+<!-- Clone -->
+<div id="area-clone">
+  <div id="kartu-template">Kartu Original</div>
+</div>
+<div class="tombol-grup">
+  <button id="tombol-clone">Clone Kartu</button>
+  <button id="tombol-hapus-terakhir">Hapus Terakhir</button>
+</div>
+
+<!-- Info -->
+<button id="tombol-info">Info Ukuran & Posisi Judul</button>
+<pre id="hasil-info"></pre>
+
+<!-- Area kartu profil -->
+<div id="area-kartu"></div>

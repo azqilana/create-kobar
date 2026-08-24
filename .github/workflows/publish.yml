@@ -25,6 +25,7 @@ jobs:
           mkdir -p templates/default/config
           mkdir -p templates/default/logic
           mkdir -p templates/default/page
+          mkdir -p templates/default/assets
           mkdir -p templates/default/style
 
           cp -r system/. templates/default/system/
@@ -32,6 +33,7 @@ jobs:
           cp -r config/. templates/default/config/
           cp -r logic/. templates/default/logic/
           cp -r page/. templates/default/page/
+          cp -r assets/. templates/default/assets/
           cp -r style/. templates/default/style/
           cp _redirects templates/default/_redirects
           cp index.html templates/default/index.html
