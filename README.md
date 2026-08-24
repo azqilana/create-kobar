@@ -763,6 +763,14 @@ Kobar.buildDiv({ children: `<a this-data-href="url">Klik</a>` })
 
 Kobar siap deploy ke **Netlify** atau **Cloudflare Pages** — sudah ada `_redirects` untuk SPA routing.
 
+> ⚠️ **Sebelum Production** — Hapus baris Eruda dari `index.html`:
+> ```html
+> <!-- Hapus dua baris ini sebelum deploy -->
+> <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+> <script>eruda.init();</script>
+> ```
+> Eruda adalah developer tools untuk debugging di mobile. Tidak perlu ada di production.
+
 ---
 
 ## 📄 Lisensi
