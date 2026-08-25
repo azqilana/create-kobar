@@ -13,7 +13,7 @@
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/azqilana/kobar"
+    "url": "https://github.com/azqilana/create-kobar"
   },
   "files": ["bin/", "templates/", "README.md", "LICENSE"]
 }

@@ -1,6 +1,8 @@
 # 🔥 Kobar
 
-**Kobar** adalah Starter-Kit JavaScript ringan dengan arsitektur **Component-Observer**. Kobar menyediakan sistem routing, component loading, dan manipulasi DOM berbasis Proxy ES6 — tanpa framework berat.
+![npm](https://img.shields.io/npm/v/create-kobar?color=orange&label=npm) ![license](https://img.shields.io/badge/license-GPL--V3-blue) ![JavaScript](https://img.shields.io/badge/language-JavaScript-yellow)
+
+**Kobar** adalah Starter-Kit JavaScript ringan dengan arsitektur **Component-Observer**. Kobar menyediakan sistem routing, component loading, dan manipulasi DOM berbasis Proxy ES6 — tanpa framework berat, tanpa dependensi eksternal.
 
 ---
 
@@ -57,7 +59,7 @@ import Kobar from "../index.js";
 
 ## 🧩 Kobar API
 
-   ### Berikut API/Methods Yang dapat di gunakan dalam menggunakan Stater-Kit ini:
+### Berikut adalah API/Methods yang tersedia dalam Starter-Kit ini:
 
 ### `Kobar.register(nama, fn)`
 
@@ -761,7 +763,14 @@ Kobar.buildDiv({ children: `<a this-data-href="url">Klik</a>` })
 
 ## 🌐 Deploy
 
-Kobar siap deploy ke **Netlify** atau **Cloudflare Pages** — sudah ada `_redirects` untuk SPA routing.
+Kobar siap deploy ke **Netlify**, **Cloudflare Pages**, atau **Vercel** — sudah ada `_redirects` untuk SPA routing.
+
+> Untuk **Vercel**, tambahkan file `vercel.json` di root project:
+> ```json
+> {
+>   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+> }
+> ```
 
 > ⚠️ **Sebelum Production** — Hapus baris Eruda dari `index.html`:
 > ```html
